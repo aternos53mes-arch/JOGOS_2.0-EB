@@ -1,0 +1,559 @@
+<html style="margin:0;padding:0;">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+(function(){
+  var s = document.createElement('style');
+  s.textContent = ':root{--bg:#202024;--card:#2a2a2f;--text:#e8e5df;--muted:#9a978f;--accent:#c47046;--accent-soft:rgba(196,112,70,.14);--accent2:#7ba8b8;--accent2-soft:rgba(123,168,184,.14);--border:rgba(232,229,223,.12)}.tela{display:none}.tela.ativa{display:block}.fade-in{animation:fadeIn .5s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.btn{transition:all .2s ease}.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(0)}.input-focus:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.codigo-item{animation:slideIn .3s ease}@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}.bloqueado{filter:blur(3px);pointer-events:none;user-select:none}.alerta-erro{animation:shake .4s ease}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}';
+  document.head.appendChild(s);
+})();
+</script>
+<div style="background-color:transparent;box-sizing:border-box;">
+  <div style="color:var(--text);font-family:'Sora',sans-serif;background:var(--bg);min-height:100vh" class="py-8 px-4">
+    <div class="max-w-2xl mx-auto">
+
+      <!-- ============================================== -->
+      <!-- TELA 1 — AVISO DE FOTOSSENSIBILIDADE          -->
+      <!-- ============================================== -->
+      <div id="telaAviso" class="tela ativa fade-in">
+        <div class="rounded-2xl p-8" style="background:var(--card);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.3)">
+          
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:var(--accent-soft);color:var(--accent)">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-2" style="color:var(--text)">Aviso de Fotossensibilidade</h1>
+            <p class="text-sm" style="color:var(--muted)">Jogos Evolution • Sistema de Segurança</p>
+          </div>
+
+          <div class="rounded-xl p-5 mb-6" style="background:rgba(251,191,36,.08);border-left:4px solid #fbbf24">
+            <p class="text-sm leading-relaxed" style="color:#fcd34d">
+              Este ambiente contém <strong>animações brilhantes, luzes piscantes, efeitos de partículas e transições rápidas</strong> que podem causar desconforto, tonturas ou convulsões em pessoas com epilepsia fotossensível.
+            </p>
+          </div>
+
+          <p class="text-base font-semibold mb-5 text-center" style="color:var(--text)">Você tem sensibilidade a luzes piscantes?</p>
+
+          <div class="grid grid-cols-2 gap-4">
+            <button class="btn rounded-xl py-4 font-semibold text-base" style="background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)" onclick="respostaFoto('sim')">
+              ✅ Sim
+            </button>
+            <button class="btn rounded-xl py-4 font-semibold text-base" style="background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3)" onclick="respostaFoto('nao')">
+              ❌ Não
+            </button>
+          </div>
+
+          <div class="mt-8 pt-6 text-center text-xs" style="color:var(--muted);border-top:1px solid var(--border)">
+            <strong style="color:var(--accent)">Jogos Evolution</strong> • Segurança em primeiro lugar
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TELA 2 — VERIFICAÇÃO DE ACESSO                -->
+      <!-- ============================================== -->
+      <div id="telaVerificacao" class="tela fade-in">
+        <div class="rounded-2xl p-8" style="background:var(--card);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.3)">
+          
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:var(--accent2-soft);color:var(--accent2)">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-2" style="color:var(--text)">Verificação de Acesso</h1>
+            <p class="text-sm" style="color:var(--muted)">Jogos Evolution • Área Restrita</p>
+          </div>
+
+          <div id="erroAcesso" class="hidden rounded-xl p-4 mb-5 text-center text-sm font-medium" style="background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)">
+            ❌ Acesso negado. Código inválido ou usuário não autorizado.
+          </div>
+
+          <!-- ABA DE OPÇÕES -->
+          <div class="flex gap-2 mb-6 p-1 rounded-xl" style="background:rgba(0,0,0,.2)">
+            <button id="abaCodigo" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all" style="background:var(--accent);color:var(--bg)" onclick="trocarAba('codigo')">
+              🎟️ Código de Acesso
+            </button>
+            <button id="abaDiscord" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all" style="color:var(--muted)" onclick="trocarAba('discord')">
+              💬 Verificar Discord
+            </button>
+          </div>
+
+          <!-- OPÇÃO 1: CÓDIGO -->
+          <div id="opcaoCodigo">
+            <label class="block text-sm font-medium mb-2" style="color:var(--text)">Digite seu código de acesso:</label>
+            <input type="text" id="inputCodigo" placeholder="Ex: EVO-2026-ABCD" maxlength="20"
+              class="input-focus w-full rounded-xl px-4 py-3.5 text-base font-mono tracking-wider mb-4 transition-all"
+              style="background:rgba(0,0,0,.2);color:var(--text);border:1px solid var(--border)">
+            
+            <button class="btn w-full rounded-xl py-3.5 font-semibold text-base" style="background:var(--accent);color:var(--bg)" onclick="verificarCodigo()">
+              🔓 Verificar e Entrar
+            </button>
+          </div>
+
+          <!-- OPÇÃO 2: DISCORD -->
+          <div id="opcaoDiscord" class="hidden">
+            <div class="rounded-xl p-5 mb-4 text-center" style="background:rgba(88,101,242,.1);border:1px solid rgba(88,101,242,.25)">
+              <div class="text-3xl mb-2">💬</div>
+              <p class="text-sm mb-1" style="color:var(--text)"><strong>Verificação por Discord</strong></p>
+              <p class="text-xs mb-4" style="color:var(--muted)">Conecte sua conta para verificar se você está no servidor oficial do Jogos Evolution</p>
+              
+              <button class="btn rounded-xl px-6 py-2.5 text-sm font-semibold" style="background:#5865F2;color:white" onclick="verificarDiscord()">
+                🔗 Conectar com Discord
+              </button>
+            </div>
+
+            <div id="statusDiscord" class="hidden rounded-xl p-4 text-center text-sm" style="background:rgba(0,0,0,.2);border:1px solid var(--border)">
+              <p id="textoDiscord" style="color:var(--muted)">⏳ Verificando...</p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-5 text-center text-xs" style="color:var(--muted);border-top:1px solid var(--border)">
+            <p>🔒 Acesso restrito a membros autorizados do Jogos Evolution</p>
+            <p class="mt-1">Não tem código? Contate um administrador no Discord.</p>
+          </div>
+
+          <button class="mt-4 w-full text-xs" style="color:var(--muted)" onclick="voltarAviso()">← Voltar ao aviso</button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TELA 3 — ACESSO LIBERADO / PAINEL             -->
+      <!-- ============================================== -->
+      <div id="telaLiberado" class="tela fade-in">
+        <div class="rounded-2xl p-8" style="background:var(--card);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.3)">
+          
+          <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:rgba(34,197,94,.15);color:#4ade80">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-2" style="color:var(--text)">🎉 Acesso Liberado!</h1>
+            <p class="text-sm" style="color:var(--muted)">Bem-vindo ao <strong style="color:var(--accent)">Jogos Evolution</strong>, <span id="nomeUsuario">Usuário</span>!</p>
+          </div>
+
+          <!-- INFORMAÇÕES DO USUÁRIO -->
+          <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="rounded-xl p-4" style="background:rgba(0,0,0,.2);border:1px solid var(--border)">
+              <p class="text-xs mb-1" style="color:var(--muted)">Tipo de Acesso</p>
+              <p class="font-bold" id="tipoAcesso" style="color:var(--accent)">Código</p>
+            </div>
+            <div class="rounded-xl p-4" style="background:rgba(0,0,0,.2);border:1px solid var(--border)">
+              <p class="text-xs mb-1" style="color:var(--muted)">Modo Visual</p>
+              <p class="font-bold" id="modoVisual" style="color:var(--accent2)">Normal</p>
+            </div>
+          </div>
+
+          <!-- LINKS RÁPIDOS -->
+          <div class="space-y-3 mb-6">
+            <button class="btn w-full rounded-xl p-4 text-left flex items-center gap-3" style="background:rgba(0,0,0,.2);border:1px solid var(--border)" onclick="alert('🎮 Redirecionando para o servidor do Jogos Evolution...\n\n(window.location.href = seu-link)')">
+              <span class="text-2xl">🎮</span>
+              <div>
+                <p class="font-semibold" style="color:var(--text)">Entrar no Servidor</p>
+                <p class="text-xs" style="color:var(--muted)">Acessar o jogo principal</p>
+              </div>
+            </button>
+
+            <button class="btn w-full rounded-xl p-4 text-left flex items-center gap-3" style="background:rgba(0,0,0,.2);border:1px solid var(--border)" onclick="alert('📋 Abrindo lista de comandos...')">
+              <span class="text-2xl">📋</span>
+              <div>
+                <p class="font-semibold" style="color:var(--text)">Comandos do Jogo</p>
+                <p class="text-xs" style="color:var(--muted)">Ver todos os comandos disponíveis</p>
+              </div>
+            </button>
+
+            <button class="btn w-full rounded-xl p-4 text-left flex items-center gap-3" style="background:rgba(0,0,0,.2);border:1px solid var(--border)" onclick="alert('💬 Discord: discord.gg/jogosevolution')">
+              <span class="text-2xl">💬</span>
+              <div>
+                <p class="font-semibold" style="color:var(--text)">Discord Oficial</p>
+                <p class="text-xs" style="color:var(--muted)">Entrar na comunidade</p>
+              </div>
+            </button>
+          </div>
+
+          <!-- PAINEL ADMIN (SÓ PARA QUEM TEM ACESSO DEV) -->
+          <div id="painelAdmin" class="hidden rounded-xl p-5 mb-6" style="background:rgba(196,112,70,.08);border:1px solid var(--accent)">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="font-bold" style="color:var(--accent)">⚙️ Painel do Desenvolvedor</h3>
+              <span class="text-xs px-2 py-1 rounded-full" style="background:var(--accent);color:var(--bg)">CORPORAÇÃO</span>
+            </div>
+
+            <p class="text-sm mb-3" style="color:var(--muted)">Criar novo código de acesso:</p>
+            
+            <div class="flex gap-2 mb-3">
+              <input type="text" id="novoCodigo" placeholder="Nome do código"
+                class="input-focus flex-1 rounded-lg px-3 py-2 text-sm"
+                style="background:rgba(0,0,0,.2);color:var(--text);border:1px solid var(--border)">
+              <select id="tipoCodigo" class="rounded-lg px-3 py-2 text-sm" style="background:rgba(0,0,0,.2);color:var(--text);border:1px solid var(--border)">
+                <option value="normal">Normal</option>
+                <option value="vip">VIP</option>
+                <option value="dev">Desenvolvedor</option>
+              </select>
+            </div>
+
+            <button class="btn w-full rounded-lg py-2.5 text-sm font-semibold mb-4" style="background:var(--accent);color:var(--bg)" onclick="criarCodigo()">
+              ➕ Gerar Código
+            </button>
+
+            <div id="codigoGerado" class="hidden rounded-lg p-3 mb-4 text-center font-mono text-sm" style="background:rgba(0,0,0,.3);border:1px dashed var(--accent)">
+              <p class="text-xs mb-1" style="color:var(--muted)">Código gerado:</p>
+              <p id="codigoGeradoTexto" class="font-bold text-lg" style="color:var(--accent)"></p>
+            </div>
+
+            <p class="text-sm font-semibold mb-2" style="color:var(--text)">📋 Códigos Ativos:</p>
+            <div id="listaCodigos" class="space-y-2 max-h-48 overflow-y-auto"></div>
+          </div>
+
+          <button class="w-full rounded-xl py-3 text-sm font-medium" style="background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)" onclick="sair()">
+            🚪 Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- TELA 4 — BLOQUEADO                           -->
+      <!-- ============================================== -->
+      <div id="telaBloqueado" class="tela fade-in">
+        <div class="rounded-2xl p-8 text-center" style="background:var(--card);border:1px solid rgba(239,68,68,.3);box-shadow:0 10px 40px rgba(239,68,68,.15)">
+          
+          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" style="background:rgba(239,68,68,.15);color:#f87171">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+
+          <h1 class="text-2xl font-bold mb-3" style="color:#f87171">🚫 Acesso Bloqueado</h1>
+          <p class="text-sm mb-6 leading-relaxed" style="color:var(--muted)">
+            Você não tem permissão para acessar o Jogos Evolution neste momento.<br><br>
+            Para obter acesso, junte-se ao nosso servidor oficial do Discord e solicite um código de acesso a um administrador.
+          </p>
+
+          <div class="rounded-xl p-4 mb-6 text-left" style="background:rgba(0,0,0,.2);border:1px solid var(--border)">
+            <p class="text-sm font-semibold mb-2" style="color:var(--text)">📌 Como conseguir acesso:</p>
+            <ol class="text-xs space-y-1.5 list-decimal list-inside" style="color:var(--muted)">
+              <li>Entre no servidor oficial do Discord</li>
+              <li>Verifique sua conta</li>
+              <li>Solicite um código a um administrador</li>
+              <li>Volte aqui e digite o código</li>
+            </ol>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button class="btn rounded-xl py-3 text-sm font-semibold" style="background:#5865F2;color:white" onclick="alert('💬 Discord: discord.gg/jogosevolution')">
+              💬 Discord
+            </button>
+            <button class="btn rounded-xl py-3 text-sm font-semibold" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent)" onclick="mostrarTela('telaVerificacao')">
+              🔐 Tenho um código
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ==========================================
+  // CONFIGURAÇÕES E DADOS
+  // ==========================================
+  
+  // Códigos de acesso padrão (já vem com alguns)
+  var CODIGOS_PADRAO = {
+    "EVO-DEV-2026": { tipo: "dev", usado: false, criadoPor: "Sistema" },
+    "EVO-VIP-2026": { tipo: "vip", usado: false, criadoPor: "Sistema" },
+    "JOGOS-2026": { tipo: "normal", usado: false, criadoPor: "Sistema" }
+  };
+
+  // Usuários do Discord autorizados (simulação)
+  var USUARIOS_DISCORD = {
+    "mapasrei7": { cargo: "Criador", tipo: "dev" },
+    "Arthur354153": { cargo: "Sub Criador", tipo: "dev" },
+    "alanlin890": { cargo: "Sub Criador", tipo: "dev" },
+    "Jogador_Evolution": { cargo: "Membro VIP", tipo: "vip" }
+  };
+
+  // Carregar dados salvos
+  var codigos = JSON.parse(localStorage.getItem("je_codigos") || JSON.stringify(CODIGOS_PADRAO));
+  var modoVisual = localStorage.getItem("je_modoVisual") || "normal";
+  var usuarioAtual = null;
+
+  // ==========================================
+  // FUNÇÕES BÁSICAS
+  // ==========================================
+
+  function salvarCodigos() {
+    localStorage.setItem("je_codigos", JSON.stringify(codigos));
+  }
+
+  function mostrarTela(id) {
+    document.querySelectorAll(".tela").forEach(function(t){ t.classList.remove("ativa"); });
+    document.getElementById(id).classList.add("ativa");
+    window.scrollTo(0, 0);
+  }
+
+  function trocarAba(tipo) {
+    var abaCodigo = document.getElementById("abaCodigo");
+    var abaDiscord = document.getElementById("abaDiscord");
+    var opcaoCodigo = document.getElementById("opcaoCodigo");
+    var opcaoDiscord = document.getElementById("opcaoDiscord");
+
+    if (tipo === "codigo") {
+      abaCodigo.style.background = "var(--accent)";
+      abaCodigo.style.color = "var(--bg)";
+      abaDiscord.style.background = "transparent";
+      abaDiscord.style.color = "var(--muted)";
+      opcaoCodigo.classList.remove("hidden");
+      opcaoDiscord.classList.add("hidden");
+    } else {
+      abaDiscord.style.background = "var(--accent)";
+      abaDiscord.style.color = "var(--bg)";
+      abaCodigo.style.background = "transparent";
+      abaCodigo.style.color = "var(--muted)";
+      opcaoDiscord.classList.remove("hidden");
+      opcaoCodigo.classList.add("hidden");
+    }
+  }
+
+  function mostrarErro() {
+    var el = document.getElementById("erroAcesso");
+    el.classList.remove("hidden");
+    el.classList.add("alerta-erro");
+    setTimeout(function(){ el.classList.remove("alerta-erro"); }, 500);
+    setTimeout(function(){ el.classList.add("hidden"); }, 4000);
+  }
+
+  // ==========================================
+  // AVISO DE FOTOSSENSIBILIDADE
+  // ==========================================
+
+  function respostaFoto(resposta) {
+    if (resposta === "sim") {
+      modoVisual = "seguro";
+      localStorage.setItem("je_modoVisual", "seguro");
+      alert("🛡️ Modo Seguro ativado!\n\nEfeitos piscantes e animações brilhantes serão reduzidos para sua segurança.");
+    } else {
+      modoVisual = "normal";
+      localStorage.setItem("je_modoVisual", "normal");
+    }
+    mostrarTela("telaVerificacao");
+  }
+
+  function voltarAviso() {
+    mostrarTela("telaAviso");
+  }
+
+  // ==========================================
+  // VERIFICAÇÃO POR CÓDIGO
+  // ==========================================
+
+  function verificarCodigo() {
+    var input = document.getElementById("inputCodigo");
+    var codigo = input.value.trim().toUpperCase();
+
+    if (!codigo) {
+      mostrarErro();
+      return;
+    }
+
+    if (codigos[codigo]) {
+      var dados = codigos[codigo];
+      
+      if (dados.usado) {
+        mostrarErro();
+        return;
+      }
+
+      // Marca como usado (opcional - pode comentar se quiser reutilizar)
+      // codigos[codigo].usado = true;
+      // salvarCodigos();
+
+      usuarioAtual = {
+        nome: "Usuário " + codigo.substring(0, 4),
+        tipo: dados.tipo,
+        metodo: "Código"
+      };
+
+      liberarAcesso();
+    } else {
+      mostrarErro();
+      input.value = "";
+    }
+  }
+
+  // ==========================================
+  // VERIFICAÇÃO POR DISCORD (SIMULADA)
+  // ==========================================
+
+  function verificarDiscord() {
+    var status = document.getElementById("statusDiscord");
+    var texto = document.getElementById("textoDiscord");
+    status.classList.remove("hidden");
+    texto.textContent = "⏳ Conectando com o Discord...";
+    texto.style.color = "var(--muted)";
+
+    setTimeout(function(){
+      texto.textContent = "🔍 Verificando se você está no servidor...";
+    }, 1000);
+
+    setTimeout(function(){
+      // Simulação: pede o nome do usuário
+      var nomeUsuario = prompt("💬 Verificação Discord\n\nDigite seu nome de usuário do Discord para verificar:");
+      
+      if (!nomeUsuario) {
+        texto.textContent = "❌ Verificação cancelada";
+        texto.style.color = "#f87171";
+        return;
+      }
+
+      if (USUARIOS_DISCORD[nomeUsuario]) {
+        var dados = USUARIOS_DISCORD[nomeUsuario];
+        texto.textContent = "✅ Verificado! Você é: " + dados.cargo;
+        texto.style.color = "#4ade80";
+        
+        usuarioAtual = {
+          nome: nomeUsuario,
+          tipo: dados.tipo,
+          metodo: "Discord"
+        };
+
+        setTimeout(liberarAcesso, 1500);
+      } else {
+        texto.textContent = "❌ Usuário não encontrado no servidor oficial";
+        texto.style.color = "#f87171";
+        setTimeout(function(){ mostrarTela("telaBloqueado"); }, 2000);
+      }
+    }, 2000);
+  }
+
+  // ==========================================
+  // LIBERAR ACESSO
+  // ==========================================
+
+  function liberarAcesso() {
+    document.getElementById("nomeUsuario").textContent = usuarioAtual.nome;
+    document.getElementById("tipoAcesso").textContent = usuarioAtual.metodo + " • " + usuarioAtual.tipo.toUpperCase();
+    document.getElementById("modoVisual").textContent = modoVisual === "seguro" ? "Seguro" : "Normal";
+
+    // Mostra painel admin só para dev
+    if (usuarioAtual.tipo === "dev") {
+      document.getElementById("painelAdmin").classList.remove("hidden");
+      atualizarListaCodigos();
+    } else {
+      document.getElementById("painelAdmin").classList.add("hidden");
+    }
+
+    mostrarTela("telaLiberado");
+  }
+
+  // ==========================================
+  // PAINEL ADMIN - CRIAR CÓDIGOS
+  // ==========================================
+
+  function gerarCodigoAleatorio() {
+    var letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    var codigo = "EVO-";
+    for (var i = 0; i < 4; i++) {
+      codigo += letras.charAt(Math.floor(Math.random() * letras.length));
+    }
+    codigo += "-";
+    for (var i = 0; i < 4; i++) {
+      codigo += letras.charAt(Math.floor(Math.random() * letras.length));
+    }
+    return codigo;
+  }
+
+  function criarCodigo() {
+    var nomeInput = document.getElementById("novoCodigo");
+    var tipoSelect = document.getElementById("tipoCodigo");
+    var nome = nomeInput.value.trim() || "Sem Nome";
+    var tipo = tipoSelect.value;
+    var codigo = gerarCodigoAleatorio();
+
+    codigos[codigo] = {
+      tipo: tipo,
+      usado: false,
+      criadoPor: usuarioAtual.nome,
+      nome: nome,
+      data: new Date().toLocaleDateString("pt-BR")
+    };
+
+    salvarCodigos();
+
+    document.getElementById("codigoGerado").classList.remove("hidden");
+    document.getElementById("codigoGeradoTexto").textContent = codigo;
+
+    nomeInput.value = "";
+    atualizarListaCodigos();
+  }
+
+  function atualizarListaCodigos() {
+    var lista = document.getElementById("listaCodigos");
+    lista.innerHTML = "";
+
+    var temCodigos = false;
+    for (var codigo in codigos) {
+      temCodigos = true;
+      var dados = codigos[codigo];
+      var div = document.createElement("div");
+      div.className = "codigo-item flex items-center justify-between rounded-lg p-2.5 text-xs";
+      div.style.background = "rgba(0,0,0,.2)";
+      div.style.border = "1px solid var(--border)";
+      
+      var tipoCor = dados.tipo === "dev" ? "#f87171" : dados.tipo === "vip" ? "#fbbf24" : "#60a5fa";
+      
+      div.innerHTML = `
+        <div>
+          <span class="font-mono font-bold" style="color:var(--text)">${codigo}</span>
+          <span class="ml-2 px-1.5 py-0.5 rounded text-xs" style="background:${tipoCor}22;color:${tipoCor}">${dados.tipo}</span>
+          ${dados.nome ? `<span class="ml-1" style="color:var(--muted)">• ${dados.nome}</span>` : ""}
+        </div>
+        <button class="text-xs px-2 py-1 rounded" style="color:#f87171;background:rgba(239,68,68,.1)" onclick="excluirCodigo('${codigo}')">🗑️</button>
+      `;
+      lista.appendChild(div);
+    }
+
+    if (!temCodigos) {
+      lista.innerHTML = '<p class="text-xs text-center py-4" style="color:var(--muted)">Nenhum código criado ainda</p>';
+    }
+  }
+
+  function excluirCodigo(codigo) {
+    if (confirm("Tem certeza que quer excluir o código " + codigo + "?")) {
+      delete codigos[codigo];
+      salvarCodigos();
+      atualizarListaCodigos();
+    }
+  }
+
+  // ==========================================
+  // SAIR
+  // ==========================================
+
+  function sair() {
+    usuarioAtual = null;
+    document.getElementById("inputCodigo").value = "";
+    document.getElementById("codigoGerado").classList.add("hidden");
+    document.getElementById("statusDiscord").classList.add("hidden");
+    mostrarTela("telaAviso");
+  }
+
+  // ==========================================
+  // EXPORTA FUNÇÕES GLOBAIS
+  // ==========================================
+  
+  window.respostaFoto = respostaFoto;
+  window.voltarAviso = voltarAviso;
+  window.trocarAba = trocarAba;
+  window.verificarCodigo = verificarCodigo;
+  window.verificarDiscord = verificarDiscord;
+  window.liberarAcesso = liberarAcesso;
+  window.criarCodigo = criarCodigo;
+  window.excluirCodigo = excluirCodigo;
+  window.sair = sair;
+  window.mostrarTela = mostrarTela;
+
+  // Enter no input de código
+  document.getElementById("inputCodigo").addEventListener("keypress", function(e){
+    if (e.key === "Enter") verificarCodigo();
+  });
+
+})();
+</script>
+</html>
